@@ -66,6 +66,6 @@ jobs:
       - name: Create Key file
         run: echo -e "${{ secrets.IDRSAPUB }}" > KEY_FILE && chmod 600 KEY_FILE && ls -l
       - name: SCP files to server
-        run: ssh -v -i KEY_FILE -o StrictHostKeyChecking=no ${{ SCP_USER_AT_HOST }}
+        run: ssh -v -i KEY_FILE -o StrictHostKeyChecking=no ${{ secrets.SCP_USER_AT_HOST }}
       - name: List
         run: ls -l
