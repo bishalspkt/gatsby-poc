@@ -29,8 +29,9 @@ jobs:
           npm run build
       - name: Upload artifacts
         uses: actions/upload-artifact@v1
-        with: public
-        path: public/
+        with: 
+          name: public
+          path: public/
 
 
   deploy:
@@ -42,7 +43,7 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: public
-          path: public
+          path: public/
       - name: List files availacle
         run: |
           cd public
