@@ -52,6 +52,7 @@ jobs:
           zip -r ${GITHUB_SHA}.zip ${GITHUB_SHA}
       - name: SCP files to server
         run: |
-          echo -e "${IDRSAPUB}" >__TEMP_INPUT_KEY_FILE
-          chmod 600 __TEMP_INPUT_KEY_FILE
-          scp -o StrictHostKeyChecking=no -v -i __TEMP_INPUT_KEY_FILE -r ${GITHUB_SHA}.zip "bishal@expozit.com":"${SCPDESTINATION}"
+          echo -e "${IDRSAPUB}" > KEY_FILE
+          cat KEYFILE
+          chmod 600 KEY_FILE
+          scp -o StrictHostKeyChecking=no -v -i KEY_FILE -r ${GITHUB_SHA}.zip "bishal@expozit.com":"${SCPDESTINATION}"
