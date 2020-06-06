@@ -66,6 +66,10 @@ jobs:
       - name: Create Key file
         run: echo -e "${{ secrets.IDRSAPUB }}" > KEY_FILE && chmod 600 KEY_FILE && ls -l
       - name: SCP files to server
-        run: ssh -v -i KEY_FILE -o StrictHostKeyChecking=no ${{ secrets.SCP_USER_AT_HOST }}
-      - name: List
-        run: ls -l
+        run: |
+          ssh -v -i KEY_FILE -o StrictHostKeyChecking=no ${{ secrets.SCP_USER_AT_HOST }}
+          ls -l
+          cd /home/bishal/github-actions
+          unzip ${GITHUB_SHA}.zip
+          echo ${{ secrets.SUDO_PASSWD }} | sudo -S rm -rf /var/www/bishal.dev/public.html
+          echo ${{ secrets.SUDO_PASSWD }} | sudo -S mv ${GITHUB_SHA} /var/www/bishal.dev/public_html
