@@ -44,7 +44,14 @@ jobs:
         with:
           name: public
           path: public/
-      - name: List files availacle
+      - name: Zip files for upload
         run: |
-          cd public
-          ls -l
+          mkdir ${GITHUB_SHA}
+          mv public ${GITHUB_SHA}
+          date > ${GITHUB_SHA}/buildInfo
+          zip -r ${GITHUB_SHA}.zip ${GITHUB_SHA}
+      - name: SCP files to server
+        run: |
+          echo -e "${IDRSAPUB}" >__TEMP_INPUT_KEY_FILE
+          chmod 600 __TEMP_INPUT_KEY_FILE
+          scp -o StrictHostKeyChecking=no -v -i __TEMP_INPUT_KEY_FILE -r ${GITHUB_SHA}.zip "${SCPUSER}"@"${SCPHOST}":"${SCPDESTINATION}"
