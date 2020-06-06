@@ -53,6 +53,6 @@ jobs:
           date > ${GITHUB_SHA}/buildInfo
           zip -r ${GITHUB_SHA}.zip ${GITHUB_SHA}
       - name: Create Key file
-        run: echo -e "${IDRSAPUB}" > KEY_FILE && chmod 600 KEY_FILE && ls -l
+        run: echo -e "${secrets.IDRSAPUB}" > KEY_FILE && chmod 600 KEY_FILE && ls -l
       - name: SCP files to server
-        run: scp -v -i KEY_FILE -o StrictHostKeyChecking=no ${GITHUB_SHA}.zip ${SCP_USER_AT_HOST_AND_DESTINATION}
+        run: scp -v -i KEY_FILE -o StrictHostKeyChecking=no ${GITHUB_SHA}.zip ${secrets.SCP_USER_AT_HOST_AND_DESTINATION}
