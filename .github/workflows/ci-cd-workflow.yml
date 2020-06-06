@@ -35,8 +35,8 @@ jobs:
           path: public/
 
 
-  deploy:
-    name: Deploy build to production
+  publish:
+    name: Publish build to server using scp
     runs-on: ubuntu-latest
     needs: build
     if: github.actor == github.event.repository.owner.login
@@ -56,3 +56,16 @@ jobs:
         run: echo -e "${{ secrets.IDRSAPUB }}" > KEY_FILE && chmod 600 KEY_FILE && ls -l
       - name: SCP files to server
         run: scp -v -i KEY_FILE -o StrictHostKeyChecking=no ${GITHUB_SHA}.zip ${{ secrets.SCP_USER_AT_HOST_AND_DESTINATION }}
+
+  release:
+    name: Bring the build live
+    runs-on: ubuntu-latest
+    needs: publish
+    if: github.actor == github.event.repository.owner.login
+    steps:
+      - name: Create Key file
+        run: echo -e "${{ secrets.IDRSAPUB }}" > KEY_FILE && chmod 600 KEY_FILE && ls -l
+      - name: SCP files to server
+        run: ssh -v -i KEY_FILE -o StrictHostKeyChecking=no ${{ SCP_USER_AT_HOST }}
+      - name: List
+        run: ls -l
