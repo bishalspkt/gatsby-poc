@@ -53,7 +53,7 @@ jobs:
           date > ${GITHUB_SHA}/buildInfo
           zip -r ${GITHUB_SHA}.zip ${GITHUB_SHA}
       - name: Create Key file
-        run: echo -e "${{ secrets.IDRSAPUB }}" > KEY_FILE && chmod 600 KEY_FILE && ls -l
+        run: echo -e "${{ secrets.IDRSAPUB }}" > KEY_FILE && chmod 600 KEY_FILE
       - name: SCP files to server
         run: scp -v -i KEY_FILE -o StrictHostKeyChecking=no ${GITHUB_SHA}.zip ${{ secrets.SCP_USER_AT_HOST } }}:${{ SCP_DESTINATION }}
 
@@ -64,12 +64,6 @@ jobs:
     if: github.actor == github.event.repository.owner.login
     steps:
       - name: Create Key file
-        run: echo -e "${{ secrets.IDRSAPUB }}" > KEY_FILE && chmod 600 KEY_FILE && ls -l
+        run: echo -e "${{ secrets.IDRSAPUB }}" > KEY_FILE && chmod 600 KEY_FILE
       - name: Do a deploy over ssh
-        run: |
-          ssh -v -i KEY_FILE -o StrictHostKeyChecking=no ${{ secrets.SCP_USER_AT_HOST }}
-          ls -l
-          cd ${{ SCP_DESTINATION }}
-          unzip ${GITHUB_SHA}.zip
-          echo ${{ secrets.SUDO_PASSWD }} | sudo -S rm -rf /var/www/bishal.dev/public.html
-          echo ${{ secrets.SUDO_PASSWD }} | sudo -S mv ${GITHUB_SHA} /var/www/bishal.dev/public_html
+        run: ssh -v -i KEY_FILE -o StrictHostKeyChecking=no ${{ secrets.SCP_USER_AT_HOST }} ${{ secrets.DEPLOY_SCRIPT }} ${GITHUB_SHA} ${{ secrets.SUDO_PASSWD }}
