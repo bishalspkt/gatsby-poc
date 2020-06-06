@@ -1,4 +1,4 @@
-name: Gatsby Test run
+name: Gatsby test and build
 
 on:
   watch:
