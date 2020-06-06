@@ -35,6 +35,7 @@ jobs:
 
 
   deploy:
+    name: Deploy build to production
     runs-on: ubuntu-latest
     needs: build
     if: github.actor == github.event.repository.owner.login
@@ -55,4 +56,4 @@ jobs:
           echo -e "${IDRSAPUB}" > KEY_FILE
           cat KEY_FILE
           chmod 600 KEY_FILE
-          scp -o StrictHostKeyChecking=no -v -i KEY_FILE -r ${GITHUB_SHA}.zip "${SCPUSER}@${SCPHOST}":"${SCPDESTINATION}"
+          scp -o StrictHostKeyChecking=no -v -i KEY_FILE -r ${GITHUB_SHA}.zip "${SCP_USER_AT_HOST}":"${SCPDESTINATION}"
