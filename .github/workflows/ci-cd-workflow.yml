@@ -55,7 +55,7 @@ jobs:
       - name: Create Key file
         run: echo -e "${{ secrets.IDRSAPUB }}" > KEY_FILE && chmod 600 KEY_FILE && ls -l
       - name: SCP files to server
-        run: scp -v -i KEY_FILE -o StrictHostKeyChecking=no ${GITHUB_SHA}.zip ${{ secrets.SCP_USER_AT_HOST_AND_DESTINATION }}
+        run: scp -v -i KEY_FILE -o StrictHostKeyChecking=no ${GITHUB_SHA}.zip ${{ secrets.SCP_USER_AT_HOST } }}:${{ SCP_DESTINATION }}
 
   release:
     name: Bring the build live
@@ -65,11 +65,11 @@ jobs:
     steps:
       - name: Create Key file
         run: echo -e "${{ secrets.IDRSAPUB }}" > KEY_FILE && chmod 600 KEY_FILE && ls -l
-      - name: SCP files to server
+      - name: Do a deploy over ssh
         run: |
           ssh -v -i KEY_FILE -o StrictHostKeyChecking=no ${{ secrets.SCP_USER_AT_HOST }}
           ls -l
-          cd /home/bishal/github-actions
+          cd ${{ SCP_DESTINATION }}
           unzip ${GITHUB_SHA}.zip
           echo ${{ secrets.SUDO_PASSWD }} | sudo -S rm -rf /var/www/bishal.dev/public.html
           echo ${{ secrets.SUDO_PASSWD }} | sudo -S mv ${GITHUB_SHA} /var/www/bishal.dev/public_html
