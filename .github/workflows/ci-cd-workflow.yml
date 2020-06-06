@@ -1,0 +1,49 @@
+name: Build and Publish
+
+on:
+  push:
+    branches:
+      - master
+  watch:
+    types: [started]
+
+jobs:
+  build:
+    name: Test and Build
+    runs-on: ubuntu-latest
+    env:
+      NODE_ENV: production
+
+    if: github.actor == github.event.repository.owner.login
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: NPM test and build
+        run: |
+          npm ci
+          npm test
+          npm run build
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v1
+        with: public
+        path: public/
+
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.actor == github.event.repository.owner.login
+    steps:
+      - name: Get build artifacts
+        uses: actions/download-artifact@master
+        with:
+          name: public
+          path: public
+      - name: List files availacle
+        run: |
+          cd public
+          ls -l
