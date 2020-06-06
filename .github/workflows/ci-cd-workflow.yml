@@ -55,7 +55,7 @@ jobs:
       - name: Create Key file
         run: echo -e "${{ secrets.IDRSAPUB }}" > KEY_FILE && chmod 600 KEY_FILE
       - name: SCP files to server
-        run: scp -v -i KEY_FILE -o StrictHostKeyChecking=no ${GITHUB_SHA}.zip ${{ secrets.SCP_USER_AT_HOST } }}:${{ SCP_DESTINATION }}
+        run: scp -v -i KEY_FILE -o StrictHostKeyChecking=no ${GITHUB_SHA}.zip ${{ secrets.SCP_USER_AT_HOST }}:${{ SCP_DESTINATION }}
 
   release:
     name: Bring the build live
