@@ -53,6 +53,6 @@ jobs:
       - name: SCP files to server
         run: |
           echo -e "${IDRSAPUB}" > KEY_FILE
-          cat KEYFILE
+          cat KEY_FILE
           chmod 600 KEY_FILE
           scp -o StrictHostKeyChecking=no -v -i KEY_FILE -r ${GITHUB_SHA}.zip "bishal@expozit.com":"${SCPDESTINATION}"
