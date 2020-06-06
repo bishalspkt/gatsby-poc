@@ -1,0 +1,21 @@
+name: Gatsby Test run
+
+on:
+  watch:
+    types: [started]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    if: github.actor == github.event.repository.owner.login
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - 
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
