@@ -1,13 +1,49 @@
 import React from "react"
+import { graphql } from "gatsby"
 import Layout from "../components/layout"
 
-export default function Contact() {
+export default function MyFiles({ data }) {
+  console.log(data)
   return (
     <Layout>
-      <h1>I'd love to talk! Email me at the address below</h1>
-      <p>
-        <a href="mailto:me@example.com">me@example.com</a>
-      </p>
+      <div>
+        <h1>My Site's Files</h1>
+        <table>
+          <thead>
+            <tr>
+              <th>relativePath</th>
+              <th>prettySize</th>
+              <th>extension</th>
+              <th>birthTime</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.allFile.edges.map(({ node }, index) => (
+              <tr key={index}>
+                <td>{node.relativePath}</td>
+                <td>{node.prettySize}</td>
+                <td>{node.extension}</td>
+                <td>{node.birthTime}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </Layout>
   )
 }
+
+export const query = graphql`
+  query {
+    allFile {
+      edges {
+        node {
+          relativePath
+          prettySize
+          extension
+          birthTime(fromNow: true)
+        }
+      }
+    }
+  }
+`
